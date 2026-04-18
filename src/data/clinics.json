@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "name": "CVS MinuteClinic",
+    "sub": "18th Ave & 7th St, Rock Island",
+    "type": "Walk-in",
+    "distance": 0.8,
+    "hours": "8 AM - 8 PM",
+    "phone": "(309) 788-0412",
+    "rating": 4.3,
+    "real": true,
+    "hourly": [
+      18,
+      25,
+      32,
+      28,
+      22,
+      15,
+      10,
+      8,
+      12,
+      16,
+      20,
+      18
+    ],
+    "currentWait": 28,
+    "bestTime": "4 PM",
+    "bestWait": 8,
+    "x": 27,
+    "y": 36
+  },
+  {
+    "id": 2,
+    "name": "Augustana Health Services",
+    "sub": "Westerlin Hall, Augustana College",
+    "type": "Student",
+    "distance": 0.3,
+    "hours": "8 AM - 5 PM",
+    "phone": "(309) 794-7357",
+    "rating": 4.6,
+    "real": true,
+    "hourly": [
+      20,
+      30,
+      28,
+      22,
+      18,
+      14,
+      10,
+      5,
+      8,
+      0,
+      0,
+      0
+    ],
+    "currentWait": 22,
+    "bestTime": "4 PM",
+    "bestWait": 5,
+    "x": 34,
+    "y": 47
+  }
+]
