@@ -6,7 +6,8 @@
 // No other dependencies needed.
 import NavBar from './components/NavBar';
 import { useState } from 'react';
-
+import StatsRow from './components/StatsRow';
+import SymptomTriage from './components/SymptomTriage';
 // ==================== DATA ====================
 // Replace this with: import clinicsData from './data/clinics.json';
 // once Lin ships the JSON file
@@ -20,22 +21,7 @@ const clinicsData = [
   { id: 7, name: "OSF PromptCare", sub: "Rock Island, 18th Ave", type: "Urgent", distance: 0.6, currentWait: 15, bestTime: "6:15 PM", bestWait: 8, real: true, x: 35, y: 50, hours: "8 AM – 8 PM", phone: "(309) 779-5555", rating: 4.3, hourly: [20, 28, 32, 28, 24, 20, 15, 12, 10, 8, 14, 0] }
 ];
 
-const symptoms = [
-  { id: 'cold', label: 'Cold / flu', care: 'pharmacy' },
-  { id: 'throat', label: 'Sore throat', care: 'walkin' },
-  { id: 'rash', label: 'Rash / skin', care: 'walkin' },
-  { id: 'sprain', label: 'Sprain / injury', care: 'urgent' },
-  { id: 'checkup', label: 'Checkup', care: 'primary' },
-  { id: 'chest', label: 'Chest pain', care: 'er' },
-];
 
-const careRecs = {
-  pharmacy: { label: 'Pharmacist', note: 'For over-the-counter options, a pharmacist can help in under 10 min. No appointment needed.' },
-  walkin: { label: 'Walk-in clinic', note: 'A walk-in clinic is ideal. We found 4 near you with wait times under 20 min.' },
-  urgent: { label: 'Urgent care', note: 'Urgent care can handle this same-day. 3 locations available within 5 miles.' },
-  primary: { label: 'Primary care', note: 'A primary care visit is best. Book ahead — today\'s slots are limited.' },
-  er: { label: 'Emergency room', note: 'Chest pain should be evaluated immediately. Call 911 or go to the nearest ER.' }
-};
 
 // ==================== HELPERS ====================
 function severity(min) {
@@ -53,63 +39,9 @@ const severityColors = {
 // ==================== SUB-COMPONENTS ====================
 
 
-function SymptomTriage({ selected, onSelect }) {
-  return (
-    <div className="bg-white border border-red-200 rounded-xl p-4 mb-4 shadow-sm">
-      <div className="text-xs text-red-800 mb-2.5 font-medium flex items-center gap-1.5">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="12" y1="8" x2="12" y2="12"/>
-          <line x1="12" y1="16" x2="12.01" y2="16"/>
-        </svg>
-        What's going on?
-      </div>
-      <div className="flex gap-1.5 flex-wrap mb-2.5">
-        {symptoms.map(s => (
-          <button
-            key={s.id}
-            onClick={() => onSelect(s)}
-            className={`px-3.5 py-1.5 text-xs rounded-full border transition-all ${
-              selected?.id === s.id
-                ? 'bg-red-600 text-white border-red-600'
-                : 'bg-white text-red-900 border-red-200 hover:border-red-400'
-            }`}
-          >
-            {s.label}
-          </button>
-        ))}
-      </div>
-      {selected && (
-        <div className="p-2.5 bg-red-50 border-l-4 border-red-600 rounded text-xs text-red-900">
-          <strong className="font-medium">Recommended: {careRecs[selected.care].label}.</strong>{' '}
-          {careRecs[selected.care].note}
-        </div>
-      )}
-    </div>
-  );
-}
 
-function StatsRow() {
-  return (
-    <div className="grid grid-cols-3 gap-2.5 mb-5">
-      <div className="bg-white border border-red-200 rounded-lg p-3">
-        <div className="text-[10px] text-red-800 mb-1 font-medium uppercase tracking-wide">Nearby</div>
-        <div className="text-xl font-medium text-red-900">14</div>
-        <div className="text-[10px] text-red-800/70">clinics</div>
-      </div>
-      <div className="bg-red-600 rounded-lg p-3 text-white">
-        <div className="text-[10px] text-red-200 mb-1 font-medium uppercase tracking-wide">Shortest</div>
-        <div className="text-xl font-medium">4 min</div>
-        <div className="text-[10px] text-red-200">right now</div>
-      </div>
-      <div className="bg-white border border-red-200 rounded-lg p-3">
-        <div className="text-[10px] text-red-800 mb-1 font-medium uppercase tracking-wide">Avg today</div>
-        <div className="text-xl font-medium text-red-900">23 min</div>
-        <div className="text-[10px] text-red-800/70">wait time</div>
-      </div>
-    </div>
-  );
-}
+
+
 
 function ClinicCard({ clinic, onClick }) {
   const s = severity(clinic.currentWait);
