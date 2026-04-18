@@ -1,7 +1,5 @@
-<<<<<<< HEAD
 .vscode
 venv/
-=======
 # Logs
 logs
 *.log
@@ -26,4 +24,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
->>>>>>> c69c7914e06c0238185bb63b904909665efffc95
