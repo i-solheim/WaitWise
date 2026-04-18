@@ -1,69 +1,16 @@
-# WaitWise
+# React + Vite
 
-Predict the best time to visit a clinic. Skip the wait.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## The Problem
+Currently, two official plugins are available:
 
-Non-emergency clinic visits waste hours of patient time. Posted wait estimates are unreliable, and patients have no way to know when a clinic is actually quiet. The result: packed waiting rooms at peak hours, empty ones in between, and frustrated patients who could have come 30 minutes later and walked straight in.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## The Solution
+## React Compiler
 
-WaitWise predicts the best 15-minute window to visit a clinic using a combination of real wait-time data and historical patterns. Patients open the app, see clinics near them ranked by predicted wait, and pick a time that fits their day.
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Key Features
+## Expanding the ESLint configuration
 
-- **Live wait times** for nearby clinics, pulled from public data sources
-- **Best time predictor** — recommends the optimal arrival window based on historical patterns
-- **Map and list view** of clinics in your area
-- **Mobile-first design** — works on any phone browser, no app install needed
-
-## Tech Stack
-
-- **Frontend:** React, Tailwind CSS
-- **Backend:** Python (data processing and prediction logic)
-- **Data sources:** CVS MinuteClinic public wait times, Google popular_times, simulated demo data
-- **Deployment:** Vercel
-
-## Data Approach
-
-We combine three data sources:
-
-1. **Real wait times** scraped from CVS MinuteClinic public listings
-2. **Historical popularity patterns** from Google popular_times for clinics in the Quad Cities area
-3. **Simulated demo data** for clinics without public feeds, generated using realistic time-of-day wait curves
-
-Simulated data is clearly labeled. In production, this would be replaced by direct clinic API integrations.
-
-## Team
-
-- **Huzefa** — Pitch lead, product, frontend support
-- **Kevin** — Frontend lead (React)
-- **Tepy** — Design and UI polish
-- **Lin** — Backend and data (Python)
-
-## Getting Started
-
-Clone the repo:
-```
-git clone https://github.com/[lin-username]/waitwise.git
-cd waitwise
-```
-
-Install frontend dependencies:
-```
-npm install
-npm run dev
-```
-
-Install backend dependencies:
-```
-pip install -r requirements.txt
-```
-
-## Demo
-
-Live demo: [Vercel URL will go here once deployed]
-
-## Status
-
-Built for [Hackathon Name], April 2026.
+If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
