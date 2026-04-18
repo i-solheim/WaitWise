@@ -6,6 +6,12 @@
 // No other dependencies needed.
 import NavBar from './components/NavBar';
 import { useState } from 'react';
+import SymptomTriage from './components/SymptomTriage';
+import StatsRow from './components/StatsRow';
+import MapView from './components/MapView';
+import ClinicCard from './components/ClinicCard';
+import DetailView from './components/DetailView';
+import ConfirmView from './components/ConfirmView';
 
 // ==================== DATA ====================
 // Replace this with: import clinicsData from './data/clinics.json';
