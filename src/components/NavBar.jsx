@@ -1,4 +1,4 @@
-export default function NavBar() {
+export default function NavBar({ points = 0 }) {
   return (
     <div className="bg-red-600 px-5 py-3.5 flex justify-between items-center">
       <div className="flex items-center gap-2.5">
@@ -16,6 +16,12 @@ export default function NavBar() {
         <div className="flex items-center gap-1.5 text-xs text-white bg-white/15 px-2.5 py-1 rounded-full">
           <span className="w-1.5 h-1.5 rounded-full bg-green-400"></span>
           <span>Rock Island, IL</span>
+        </div>
+        <div className="flex items-center gap-1.5 text-xs text-white bg-white/20 px-2.5 py-1 rounded-full font-medium">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
+            <polygon points="12,2 15,8 22,9 17,14 18,21 12,18 6,21 7,14 2,9 9,8"/>
+          </svg>
+          <span>{points} pts</span>
         </div>
         <div className="w-8 h-8 rounded-full bg-white text-red-600 flex items-center justify-center text-xs font-medium">HA</div>
       </div>

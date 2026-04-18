@@ -1,6 +1,6 @@
 import { severity, severityColors } from '../data/constants';
 
-export default function DetailView({ clinic, onBack, onBook }) {
+export default function DetailView({ clinic, onBack, onCheckin, activeCheckin, allClinics = [], userLocation }) {
   const s = severity(clinic.currentWait);
   const c = severityColors[s];
   const hourLabels = ['9a', '10a', '11a', '12p', '1p', '2p', '3p', '4p', '5p', '6p', '7p', '8p'];
@@ -86,17 +86,54 @@ export default function DetailView({ clinic, onBack, onBook }) {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      {(() => {
+  const isCheckedInHere = activeCheckin?.clinicId === clinic.id;
+  const isCheckedInElsewhere = activeCheckin && activeCheckin.clinicId !== clinic.id;
+  const otherClinic = isCheckedInElsewhere ? allClinics.find(c => c.id === activeCheckin.clinicId) : null;
+
+  if (isCheckedInHere) {
+    return (
+      <div className="p-3 bg-green-50 border-2 border-green-600 rounded-lg text-center">
+        <div className="text-xs font-medium text-green-800 mb-1">✓ YOU'RE CHECKED IN HERE</div>
+        <div className="text-sm text-green-900">Go to your active check-in to check out when seen.</div>
+      </div>
+    );
+  }
+
+  if (isCheckedInElsewhere) {
+    return (
+      <div>
+        <div className="p-3 bg-red-100 border border-red-600 rounded-lg text-center text-xs text-red-900 mb-3">
+          You're already checked in at <strong>{otherClinic?.name || 'another clinic'}</strong>. Check out first.
+        </div>
         <button
-          onClick={onBook}
-          className="flex-[2] py-3 text-sm border-0 bg-red-600 text-white rounded-lg cursor-pointer font-medium shadow-md hover:bg-red-700"
+          disabled
+          className="w-full py-3 text-sm border-0 bg-red-300 text-white rounded-lg cursor-not-allowed font-medium"
         >
-          Remind me at {clinic.bestTime}
-        </button>
-        <button className="flex-1 py-3 text-sm border border-red-600 bg-white text-red-600 rounded-lg cursor-pointer font-medium hover:bg-red-50">
-          Directions
+          Check in here
         </button>
       </div>
+    );
+  }
+
+  return (
+    <div className="flex gap-2">
+      <button
+        onClick={() => onCheckin(clinic.id)}
+        className="flex-[2] py-3 text-sm border-0 bg-red-600 text-white rounded-lg cursor-pointer font-medium shadow-md hover:bg-red-700 flex items-center justify-center gap-2"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 11l3 3L22 4"/>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+        Check in here
+      </button>
+      <button className="flex-1 py-3 text-sm border border-red-600 bg-white text-red-600 rounded-lg cursor-pointer font-medium hover:bg-red-50">
+        Directions
+      </button>
+    </div>
+  );
+})()}
     </div>
   );
 }

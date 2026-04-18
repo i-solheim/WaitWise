@@ -1,11 +1,56 @@
-import NavBar from './components/NavBar';
 import { useState } from 'react';
-import SymptomTriage from './components/SymptomTriage';
+import NavBar from './components/NavBar';
 import StatsRow from './components/StatsRow';
-import MapView from './components/MapView';
+import SymptomTriage from './components/SymptomTriage';
 import ClinicCard from './components/ClinicCard';
+import MapView from './components/MapView';
 import DetailView from './components/DetailView';
 import ConfirmView from './components/ConfirmView';
+
+// ==================== POINT CALCULATION ====================
+// Calculates points earned from a check-out
+// Based on: base reward + wait-time bonus + accuracy bonus - repeat-visit decay
+function calculatePoints(waitedMinutes, clinicAverageWait, isRepeatVisit) {
+  const breakdown = [];
+  let total = 0;
+
+  // Base reward: verified check-in (GPS + 3 min minimum already passed)
+  breakdown.push({ label: "Verified check-in", pts: 15 });
+  total += 15;
+
+  // Wait-time bonus (capped — can't farm by waiting forever)
+  let waitBonus = 0;
+  if (waitedMinutes >= 5 && waitedMinutes < 20) {
+    waitBonus = 10;
+    breakdown.push({ label: "Standard wait bonus", pts: 10 });
+  } else if (waitedMinutes >= 20) {
+    waitBonus = 20;
+    breakdown.push({ label: "Long wait bonus (capped at 45 min)", pts: 20 });
+  }
+  total += waitBonus;
+
+  // Accuracy bonus — matches the crowd within 15%
+  if (waitedMinutes >= 5 && clinicAverageWait > 0) {
+    const diff = Math.abs(waitedMinutes - clinicAverageWait);
+    const percentDiff = (diff / clinicAverageWait) * 100;
+    if (percentDiff <= 15) {
+      breakdown.push({ label: "Accuracy bonus (matches crowd)", pts: 5 });
+      total += 5;
+    }
+  }
+
+  // Repeat-visit decay
+  if (isRepeatVisit === "same-day") {
+    breakdown.push({ label: "Same clinic today — no points", pts: -total });
+    total = 0;
+  } else if (isRepeatVisit === "within-48h") {
+    const halfOff = Math.round(total * 0.5);
+    breakdown.push({ label: "Within 48h — half points", pts: -halfOff });
+    total = total - halfOff;
+  }
+
+  return { total, breakdown };
+}
 
 // ==================== DATA ====================
 const clinicsData = [
@@ -20,12 +65,18 @@ const clinicsData = [
 
 // ==================== MAIN COMPONENT ====================
 export default function WaitWise() {
+  // View navigation state
   const [view, setView] = useState('home');
   const [selectedClinicId, setSelectedClinicId] = useState(null);
   const [selectedSymptom, setSelectedSymptom] = useState(null);
   const [mapMode, setMapMode] = useState(false);
   const [sortBy, setSortBy] = useState('wait');
   const [typeFilter, setTypeFilter] = useState('all');
+
+  // NEW state for check-in + points + GPS
+  const [activeCheckin, setActiveCheckin] = useState(null);
+  const [points, setPoints] = useState(50);
+  const [userLocation, setUserLocation] = useState(null);
 
   const selectedClinic = clinicsData.find(c => c.id === selectedClinicId);
 
@@ -42,7 +93,7 @@ export default function WaitWise() {
   return (
     <div className="min-h-screen bg-red-50 p-5">
       <div className="max-w-3xl mx-auto bg-red-50 rounded-xl shadow-lg overflow-hidden">
-        <NavBar />
+        <NavBar points={points} />
 
         {view === 'home' && (
           <div className="p-6">
@@ -114,10 +165,23 @@ export default function WaitWise() {
         {view === 'detail' && selectedClinic && (
           <DetailView
             clinic={selectedClinic}
+            activeCheckin={activeCheckin}
+            allClinics={clinicsData}
+            userLocation={userLocation}
             onBack={() => setView('home')}
-            onBook={() => setView('confirm')}
+            onCheckin={(clinicId) => {
+              // Block if already checked in somewhere else
+              if (activeCheckin && activeCheckin.clinicId !== clinicId) {
+                alert("You're already checked in elsewhere. Check out first.");
+                return;
+              }
+              // Set the check-in
+              setActiveCheckin({ clinicId, startTime: Date.now() });
+              setPoints(points + 15);
+              setView('checkedin');
+            }}
           />
-        )}
+)}
 
         {view === 'confirm' && selectedClinic && (
           <ConfirmView
