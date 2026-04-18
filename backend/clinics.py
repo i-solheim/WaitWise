@@ -12,6 +12,8 @@ clinics_seed = [
         "phone": "(309) 794-7357",
         "rating": 4.6,
         "real": True,  # scrape this
+        "checkinCount": 0,
+        "lastCheckin": None,
     },
     {
         "id": 2,
@@ -23,6 +25,8 @@ clinics_seed = [
         "phone": "(309) 788-0412",
         "rating": 4.3,
         "real": True,  # scrape this
+        "checkinCount": 0,
+        "lastCheckin": None,
     },
     {
         "id": 3,
@@ -34,6 +38,8 @@ clinics_seed = [
         "phone": "(563) 336-3000",
         "rating": 5.0,
         "real": True,  # scrape this — closest to Augie, perfect rating
+        "checkinCount": 0,
+        "lastCheckin": None,
     },
     {
         "id": 4,
@@ -45,6 +51,8 @@ clinics_seed = [
         "phone": "(309) 779-7050",
         "rating": 3.3,
         "real": True,  # scrape this — major chain, high traffic
+        "checkinCount": 0,
+        "lastCheckin": None,
     },
     {
         "id": 5,
@@ -56,6 +64,8 @@ clinics_seed = [
         "phone": "(309) 581-7610",
         "rating": 3.1,
         "real": True,  # scrape this — second UnityPoint location nearby
+        "checkinCount": 0,
+        "lastCheckin": None,
     },
     {
         "id": 6,
@@ -67,6 +77,8 @@ clinics_seed = [
         "phone": "(563) 421-3800",
         "rating": 2.6,
         "real": False,
+        "checkinCount": 0,
+        "lastCheckin": None,
     },
     {
         "id": 7,
@@ -78,6 +90,8 @@ clinics_seed = [
         "phone": "(309) 281-8000",
         "rating": 4.1,
         "real": False,
+        "checkinCount": 0,
+        "lastCheckin": None,
     },
     {
         "id": 8,
@@ -89,6 +103,8 @@ clinics_seed = [
         "phone": "(563) 949-4503",
         "rating": 4.2,
         "real": False,
+        "checkinCount": 0,
+        "lastCheckin": None,
     },
     {
         "id": 9,
@@ -100,6 +116,8 @@ clinics_seed = [
         "phone": "(563) 362-3052",
         "rating": 3.7,
         "real": False,
+        "checkinCount": 0,
+        "lastCheckin": None,
     },
     {
         "id": 10,
@@ -111,6 +129,8 @@ clinics_seed = [
         "phone": "(563) 742-4350",
         "rating": 3.3,
         "real": False,
+        "checkinCount": 0,
+        "lastCheckin": None,
     },
     {
         "id": 11,
@@ -122,6 +142,8 @@ clinics_seed = [
         "phone": "(563) 388-7000",
         "rating": 4.8,
         "real": False,
+        "checkinCount": 0,
+        "lastCheckin": None,
     },
     {
         "id": 12,
@@ -133,6 +155,8 @@ clinics_seed = [
         "phone": "(563) 421-3800",
         "rating": 2.4,
         "real": False,
+        "checkinCount": 0,
+        "lastCheckin": None,
     },
     {
         "id": 13,
@@ -144,6 +168,8 @@ clinics_seed = [
         "phone": "(563) 362-3052",
         "rating": 4.6,
         "real": False,
+        "checkinCount": 0,
+        "lastCheckin": None,
     },
 ]
 
