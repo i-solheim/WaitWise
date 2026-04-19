@@ -198,7 +198,7 @@ export default function DetailView({
                     );
                     return;
                   }
-                  onCheckin(clinic.id);
+                  onCheckin(clinic.id, clinic.currentWait);
                 } catch (err) {
                   alert(
                     "Could not get your location. Please allow location access.",
