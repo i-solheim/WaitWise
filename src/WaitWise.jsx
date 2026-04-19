@@ -304,7 +304,7 @@ export default function WaitWise() {
               selected={selectedSymptom}
               onSelect={setSelectedSymptom}
             />
-            <StatsRow />
+            <StatsRow clinics={clinics} />
 
             <div className="flex justify-between items-center mb-3">
               <div className="text-sm font-medium text-red-900">
