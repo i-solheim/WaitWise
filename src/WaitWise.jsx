@@ -275,6 +275,31 @@ export default function WaitWise() {
               </p>
             </div>
 
+            {activeCheckin && (
+              <div
+                onClick={() => {
+                  setSelectedClinicId(activeCheckin.clinicId);
+                  setView("checkedin");
+                }}
+                className="bg-green-600 text-white rounded-xl p-4 mb-4 cursor-pointer flex justify-between items-center"
+              >
+                <div>
+                  <div className="text-[10px] font-medium tracking-wider text-green-200 mb-1">
+                    ACTIVE CHECK-IN
+                  </div>
+                  <div className="text-sm font-medium">
+                    {clinics.find(c => c.id === activeCheckin.clinicId)?.name}
+                  </div>
+                  <div className="text-[11px] text-green-200 mt-0.5">
+                    Tap to check out when seen
+                  </div>
+                </div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </div>
+            )}
+
             <SymptomTriage
               selected={selectedSymptom}
               onSelect={setSelectedSymptom}
@@ -288,21 +313,19 @@ export default function WaitWise() {
               <div className="flex gap-1 bg-white border border-red-200 rounded-lg p-0.5">
                 <button
                   onClick={() => setMapMode(false)}
-                  className={`px-3.5 py-1 text-xs rounded-md border-0 cursor-pointer ${
-                    !mapMode
-                      ? "bg-red-600 text-white font-medium"
-                      : "bg-transparent text-red-900"
-                  }`}
+                  className={`px-3.5 py-1 text-xs rounded-md border-0 cursor-pointer ${!mapMode
+                    ? "bg-red-600 text-white font-medium"
+                    : "bg-transparent text-red-900"
+                    }`}
                 >
                   List
                 </button>
                 <button
                   onClick={() => setMapMode(true)}
-                  className={`px-3.5 py-1 text-xs rounded-md border-0 cursor-pointer ${
-                    mapMode
-                      ? "bg-red-600 text-white font-medium"
-                      : "bg-transparent text-red-900"
-                  }`}
+                  className={`px-3.5 py-1 text-xs rounded-md border-0 cursor-pointer ${mapMode
+                    ? "bg-red-600 text-white font-medium"
+                    : "bg-transparent text-red-900"
+                    }`}
                 >
                   Map
                 </button>
@@ -356,6 +379,12 @@ export default function WaitWise() {
             userLocation={userLocation}
             onBack={() => setView("home")}
             onCheckin={async (clinicId, reportedWait) => {
+              if (activeCheckin && activeCheckin.clinicId === clinicId) {
+                // already checked in here — go to checkedin view
+                setView("checkedin");
+                return;
+              }
+
               if (activeCheckin && activeCheckin.clinicId !== clinicId) {
                 alert("You're already checked in elsewhere. Check out first.");
                 return;

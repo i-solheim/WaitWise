@@ -60,9 +60,8 @@ export default function DetailView({
             </div>
           </div>
           <span
-            className={`text-[10px] px-2.5 py-0.5 rounded-full font-medium tracking-wider ${
-              clinic.real ? "bg-red-600 text-white" : "bg-red-100 text-red-800"
-            }`}
+            className={`text-[10px] px-2.5 py-0.5 rounded-full font-medium tracking-wider ${clinic.real ? "bg-red-600 text-white" : "bg-red-100 text-red-800"
+              }`}
           >
             {clinic.real ? "LIVE" : "PREDICTED"}
           </span>
@@ -116,13 +115,12 @@ export default function DetailView({
                   </div>
                   <div className="w-full max-w-[22px] h-20 flex items-end">
                     <div
-                      className={`w-full rounded-t ${
-                        isClosed
+                      className={`w-full rounded-t ${isClosed
                           ? "bg-red-200"
                           : isBest
                             ? "bg-red-600"
                             : "bg-red-300"
-                      }`}
+                        }`}
                       style={{
                         height: `${h}%`,
                         minHeight: isClosed ? "2px" : "4px",
@@ -151,16 +149,21 @@ export default function DetailView({
 
         if (isCheckedInHere) {
           return (
-            <div className="p-3 bg-green-50 border-2 border-green-600 rounded-lg text-center">
-              <div className="text-xs font-medium text-green-800 mb-1">
-                ✓ YOU'RE CHECKED IN HERE
-              </div>
-              <div className="text-sm text-green-900">
-                Go to your active check-in to check out when seen.
+            <div>
+              <div className="p-3 bg-green-50 border-2 border-green-600 rounded-lg text-center mb-3">
+                <div className="text-xs font-medium text-green-800 mb-1">✓ YOU'RE CHECKED IN HERE</div>
+                <div className="text-sm text-green-900 mb-2">You're currently waiting at this clinic.</div>
+                <button
+                  onClick={() => onCheckin(clinic.id)}
+                  className="w-full py-2.5 bg-green-600 text-white rounded-lg text-sm font-medium border-0 cursor-pointer hover:bg-green-700"
+                >
+                  Go to check-out →
+                </button>
               </div>
             </div>
           );
         }
+
 
         if (isCheckedInElsewhere) {
           return (
