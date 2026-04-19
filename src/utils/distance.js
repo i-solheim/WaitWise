@@ -1,5 +1,5 @@
 // Maximum distance allowed to check in or check out (100 meters)
-export const MAX_DISTANCE_METERS = 999999;
+export const MAX_DISTANCE_METERS = 500;
 
 // Minimum wait time required before checking out (3 minutes = 180 seconds)
 export const MIN_WAIT_SECONDS = 180;

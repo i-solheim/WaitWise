@@ -16,7 +16,8 @@ import CheckedInView from "./components/CheckedInView";
 import CheckoutDenied from "./components/CheckoutDenied";
 import CheckoutConfirm from "./components/CheckoutConfirm";
 import { fetchClinics, submitCheckin, getUserId } from "./utils/api";
-import PointsDashboard from './components/PointsDashboard';
+import PointsDashboard from "./components/PointsDashboard";
+import RedeemRewards from "./components/RedeemRewards";
 
 // ==================== POINT CALCULATION ====================
 // Calculates points earned from a check-out
@@ -88,7 +89,7 @@ const clinicsData = [
     id: 2,
     name: "Augustana Health Services",
     lat: 41.5018999,
-    lng: -90.5520560,
+    lng: -90.552056,
     sub: "On campus, Westerlin Hall",
     type: "Student",
     distance: 0.3,
@@ -244,7 +245,9 @@ export default function WaitWise() {
         setClinics(backendClinics);
       } catch (err) {
         console.warn("Failed to load clinics from backend:", err);
-        setApiError("Unable to load live clinic data. Using local fallback data.");
+        setApiError(
+          "Unable to load live clinic data. Using local fallback data.",
+        );
       } finally {
         setIsLoadingClinics(false);
       }
@@ -259,7 +262,7 @@ export default function WaitWise() {
   return (
     <div className="min-h-screen bg-red-50 p-5">
       <div className="max-w-3xl mx-auto bg-red-50 rounded-xl shadow-lg overflow-hidden">
-        <NavBar points={points} onPointsClick={() => setView('points')} />
+        <NavBar points={points} onPointsClick={() => setView("points")} />
 
         {view === "home" && (
           <div className="p-6">
@@ -285,19 +288,21 @@ export default function WaitWise() {
               <div className="flex gap-1 bg-white border border-red-200 rounded-lg p-0.5">
                 <button
                   onClick={() => setMapMode(false)}
-                  className={`px-3.5 py-1 text-xs rounded-md border-0 cursor-pointer ${!mapMode
+                  className={`px-3.5 py-1 text-xs rounded-md border-0 cursor-pointer ${
+                    !mapMode
                       ? "bg-red-600 text-white font-medium"
                       : "bg-transparent text-red-900"
-                    }`}
+                  }`}
                 >
                   List
                 </button>
                 <button
                   onClick={() => setMapMode(true)}
-                  className={`px-3.5 py-1 text-xs rounded-md border-0 cursor-pointer ${mapMode
+                  className={`px-3.5 py-1 text-xs rounded-md border-0 cursor-pointer ${
+                    mapMode
                       ? "bg-red-600 text-white font-medium"
                       : "bg-transparent text-red-900"
-                    }`}
+                  }`}
                 >
                   Map
                 </button>
@@ -368,7 +373,10 @@ export default function WaitWise() {
                 fetchClinics()
                   .then(setClinics)
                   .catch((err) =>
-                    console.warn("Could not refresh clinics after check-in:", err),
+                    console.warn(
+                      "Could not refresh clinics after check-in:",
+                      err,
+                    ),
                   );
               } catch (err) {
                 alert(`Check-in failed: ${err.message}`);
@@ -377,28 +385,20 @@ export default function WaitWise() {
           />
         )}
 
-        {view === 'points' && (
+        {view === "points" && (
           <PointsDashboard
             points={points}
-            onBack={() => setView('home')}
-            onRedeem={() => setView('redeem')}
+            onBack={() => setView("home")}
+            onRedeem={() => setView("redeem")}
           />
         )}
 
-        {view === 'redeem' && (
-          <div className="p-6">
-            <button
-              onClick={() => setView('points')}
-              className="px-3.5 py-1.5 text-xs border border-red-200 bg-white text-red-900 rounded-lg cursor-pointer mb-4 font-medium"
-            >
-              ← Back
-            </button>
-            <div className="text-center text-red-900 mt-10 text-sm">Redeem screen coming soon</div>
-          </div>
+        {view === "redeem" && (
+          <RedeemRewards points={points} onBack={() => setView("home")} />
         )}
 
-        {view === "checkedin" && (
-          selectedClinic ? (
+        {view === "checkedin" &&
+          (selectedClinic ? (
             <CheckedInView
               clinic={selectedClinic}
               checkinStartTime={activeCheckin?.startTime}

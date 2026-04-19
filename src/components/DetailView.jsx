@@ -194,7 +194,7 @@ export default function DetailView({
                   );
                   if (dist > MAX_DISTANCE_METERS) {
                     alert(
-                      `You're ${dist}m away — must be within 100m to check in.`,
+                      `You're ${dist}m away — must be within 500m to check in.`,
                     );
                     return;
                   }
