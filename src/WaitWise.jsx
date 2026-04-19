@@ -4,7 +4,7 @@ import {
   MAX_DISTANCE_METERS,
   MIN_WAIT_SECONDS,
 } from "./utils/distance";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "./components/NavBar";
 import StatsRow from "./components/StatsRow";
 import SymptomTriage from "./components/SymptomTriage";
@@ -15,6 +15,7 @@ import ConfirmView from "./components/ConfirmView";
 import CheckedInView from "./components/CheckedInView";
 import CheckoutDenied from "./components/CheckoutDenied";
 import CheckoutConfirm from "./components/CheckoutConfirm";
+import { fetchClinics, submitCheckin, getUserId } from "./utils/api";
 
 // ==================== POINT CALCULATION ====================
 // Calculates points earned from a check-out
@@ -212,8 +213,13 @@ export default function WaitWise() {
   const [activeCheckin, setActiveCheckin] = useState(null);
   const [points, setPoints] = useState(50);
   const [userLocation, setUserLocation] = useState(null);
+  const [clinics, setClinics] = useState(clinicsData);
+  const [isLoadingClinics, setIsLoadingClinics] = useState(true);
+  const [apiError, setApiError] = useState(null);
 
-  const selectedClinic = clinicsData.find((c) => c.id === selectedClinicId);
+  const selectedClinic = clinics.find(
+    (c) => String(c.id) === String(selectedClinicId),
+  );
 
   const [deniedReason, setDeniedReason] = useState(null);
   const [deniedValue, setDeniedValue] = useState(null);
@@ -222,13 +228,27 @@ export default function WaitWise() {
 
   let displayed =
     typeFilter === "all"
-      ? [...clinicsData]
-      : clinicsData.filter((c) => c.type === typeFilter);
+      ? [...clinics]
+      : clinics.filter((c) => c.type === typeFilter);
   if (sortBy === "wait")
     displayed.sort((a, b) => a.currentWait - b.currentWait);
   else if (sortBy === "distance")
     displayed.sort((a, b) => a.distance - b.distance);
   else displayed.sort((a, b) => a.bestWait - b.bestWait);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const backendClinics = await fetchClinics();
+        setClinics(backendClinics);
+      } catch (err) {
+        console.warn("Failed to load clinics from backend:", err);
+        setApiError("Unable to load live clinic data. Using local fallback data.");
+      } finally {
+        setIsLoadingClinics(false);
+      }
+    })();
+  }, []);
 
   const handleClinicClick = (id) => {
     setSelectedClinicId(id);
@@ -328,31 +348,47 @@ export default function WaitWise() {
           <DetailView
             clinic={selectedClinic}
             activeCheckin={activeCheckin}
-            allClinics={clinicsData}
+            allClinics={clinics}
             userLocation={userLocation}
             onBack={() => setView("home")}
-            onCheckin={(clinicId) => {
+            onCheckin={async (clinicId, reportedWait) => {
               if (activeCheckin && activeCheckin.clinicId !== clinicId) {
                 alert("You're already checked in elsewhere. Check out first.");
                 return;
               }
-              setActiveCheckin({ clinicId, startTime: Date.now() });
-              setPoints(points + 15);
-              setView("checkedin");
+
+              try {
+                const result = await submitCheckin(
+                  clinicId,
+                  reportedWait,
+                  getUserId(),
+                );
+                setPoints(result.total_points);
+                setActiveCheckin({ clinicId, startTime: Date.now() });
+                setView("checkedin");
+                fetchClinics()
+                  .then(setClinics)
+                  .catch((err) =>
+                    console.warn("Could not refresh clinics after check-in:", err),
+                  );
+              } catch (err) {
+                alert(`Check-in failed: ${err.message}`);
+              }
             }}
           />
         )}
 
-        {view === "checkedin" && selectedClinic && (
-          <CheckedInView
-            clinic={selectedClinic}
-            checkinStartTime={activeCheckin?.startTime}
-            onBack={() => setView("home")}
-            onCancel={() => {
-              setActiveCheckin(null);
-              setView("home");
-            }}
-            onCheckout={async () => {
+        {view === "checkedin" && (
+          selectedClinic ? (
+            <CheckedInView
+              clinic={selectedClinic}
+              checkinStartTime={activeCheckin?.startTime}
+              onBack={() => setView("home")}
+              onCancel={() => {
+                setActiveCheckin(null);
+                setView("home");
+              }}
+              onCheckout={async () => {
               const elapsed = Math.floor(
                 (Date.now() - activeCheckin.startTime) / 1000,
               );
@@ -392,7 +428,7 @@ export default function WaitWise() {
               }
             }}
           />
-        )}
+        ) : null)}
 
         {view === "denied" && (
           <CheckoutDenied
